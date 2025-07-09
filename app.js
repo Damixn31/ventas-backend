@@ -24,7 +24,7 @@ app.use(cors({
 app.use(cookieParser());
 
 // RUTAS
-app.use('/api/productos', productosRoutes); //, verifyToken, isAdmin
+app.use('/api/productos', productosRoutes);  //verifyToken, isAdmin,
 app.use('/api', authRoutes);
 app.use('/api', ventasRoutes);
 
