@@ -3,10 +3,11 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 
-import  { verifyToken, isAdmin } from './middleware/auth.middleware.js';
+import { verifyToken, isAdmin } from './middleware/auth.middleware.js';
 import productosRoutes from './routes/productos.routes.js';
 import authRoutes from './routes/auth.routes.js';
 import ventasRoutes from './routes/ventas.routes.js';
+import categoriaRoutes from './routes/categorias.routes.js';
 
 dotenv.config();
 
@@ -16,7 +17,7 @@ app.use(express.json());
 // el cors tiene que ir primero que las rutas
 app.use(cors({
   origin: ['http://localhost:5173', 'http://localhost:5174'],  // los puertos de tu frontend
-  method: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], 
+  method: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true  // solo si vas a usar cookies o auth headers
 }));
@@ -27,6 +28,7 @@ app.use(cookieParser());
 app.use('/api/productos', productosRoutes);  //verifyToken, isAdmin,
 app.use('/api', authRoutes);
 app.use('/api', ventasRoutes);
+app.use('/api/categorias', categoriaRoutes);
 
 
 
@@ -34,7 +36,7 @@ app.use('/api', ventasRoutes);
 //app.options('*', cors()); //maneja OPTIONS explicitamente
 
 app.get('/ping', (req, res) => {
-   res.json({ message: 'pong' });
+  res.json({ message: 'pong' });
 });
 //app.get('/ping', (req, res) => {
 // db.query('SELECT 1', (err, result) => {
@@ -47,5 +49,5 @@ app.get('/ping', (req, res) => {
 //inicio servidor
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
-   console.log('Servidor corriendo en el puerto 4000');
+  console.log('Servidor corriendo en el puerto 4000');
 });
