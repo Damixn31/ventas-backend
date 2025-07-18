@@ -20,9 +20,20 @@ export const getProductos = async (req, res) => {
 // Crear nuevo producto
 export const createProducto = async (req, res) => {
   try {
-    const { nombre, categoria_id, precio_unitario, stock } = req.body;
-    const nuevo = await Producto.create({ nombre, categoria_id, precio_unitario, stock });
-    res.status(201).json({ message: 'Producto creado', producto: nuevo });
+    const { nombre, precio_unitario, stock, categoria_id } = req.body;
+    if (!nombre || precio_unitario == null || stock == null) {
+      return res.status(400).json({ error: 'Nombre, precio y stock son obligatorios.' });
+    }
+    const categoriaId = !isNaN(Number(categoria_id)) ? Number(categoria_id) : null;
+
+    if (categoriaId) {
+      const categoryExists = await Categoria.findByPk(categoriaId);
+      if (!categoryExists) {
+        return res.status(400).json({ error: 'La categoria especifica no existe.' });
+      }
+    }
+    const newProducto = await Producto.create({ nombre, precio_unitario, stock, categoria_id: categoriaId });
+    res.json(newProducto);
   } catch (err) {
     res.status(500).json({ error: 'Error al crear producto', detalle: err.message });
   }
